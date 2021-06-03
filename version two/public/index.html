@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/stimulus/dist/stimulus.umd.js"></script>
+  <script>
+   (() => {
+    const application = Stimulus.Application.start()
+
+    application.register("slider", class extends Stimulus.Controller {
+      static get targets() {
+        return [ "scrollContainer", "image", "indicator" ]
+      }
+      initialize() {
+        this.observer = new IntersectionObserver(this.onIntersectionObserved.bind(this), {
+          root: this.scrollContainerTarget,
+          threshold: 0.5
+        })
+        this.imageTargets.forEach(image => {
+          this.observer.observe(image)
+        })
+      }
+
+      onIntersectionObserved(entries) {
+        entries.forEach(entry => {
+          if (entry.intersectionRatio > 0.5) {
+            const intersectingIndex = this.imageTargets.indexOf(entry.target)
+            this.indicatorTargets[intersectingIndex].classList.add("bg-blue-900")
+          }
+          else { 
+            const intersectingIndex = this.imageTargets.indexOf(entry.target)
+            this.indicatorTargets[intersectingIndex].classList.remove("bg-blue-900")
+          }
+        })
+      }
+    })
+  })()
+  </script>
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+  <title>Service Name Here</title>
+  <link rel="stylesheet" href="main.css" />
+</head>
+
+<body>
+  <div id="name-of-the-service"></div>
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js"></script>
+  <script>
+    ReactDOM.render(
+      React.createElement(NameOfTheService),
+      document.getElementById('name-of-the-service')
+    );
+  </script>
+
+</body>
+
+</html>
